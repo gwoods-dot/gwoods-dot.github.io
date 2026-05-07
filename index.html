@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flight Slot Sign-Up — Verify to Continue</title>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f4f5f7;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      color: #1a1a2e;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    .icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1.25rem;
+      background: #eef2ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: #4f46e5;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+
+    .turnstile-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      min-height: 65px;
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: #4f46e5;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s, transform 0.1s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn:hover:not(:disabled) { background: #4338ca; }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .error {
+      display: none;
+      color: #b91c1c;
+      font-size: 0.82rem;
+      margin-top: 0.75rem;
+    }
+
+    .footer {
+      margin-top: 1.75rem;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+
+    <h1>Human Verification Required</h1>
+    <p>Complete the verification below to access today's flight slot sign-up. This helps ensure fair access for all students.</p>
+
+    <div class="turnstile-wrap">
+      <!--
+        SETUP INSTRUCTIONS:
+        1. Go to https://dash.cloudflare.com and sign in (free account).
+        2. Click "Turnstile" in the left sidebar.
+        3. Click "Add site" and create a new widget.
+        4. For "Widget type" choose "Managed" (easiest for users).
+        5. Copy your "Site Key" and replace YOUR_SITE_KEY_HERE below.
+        6. Copy your "Secret Key" — you won't need it for this static page
+           since verification is client-side only (suitable for your use case).
+      -->
+      <div class="cf-turnstile"
+           data-sitekey="YOUR_SITE_KEY_HERE"
+           data-callback="onVerified"
+           data-error-callback="onError"
+           data-theme="light">
+      </div>
+    </div>
+
+    <button class="btn" id="continueBtn" disabled onclick="proceed()">
+      Continue to Sign-Up
+    </button>
+
+    <div class="error" id="errorMsg">
+      Verification failed. Please try again.
+    </div>
+
+    <div class="footer">
+      This page is protected against automated sign-ups.
+    </div>
+
+  </div>
+
+  <script>
+    /*
+      SETUP: Replace this URL with your actual SignupGenius link.
+      Example: "https://www.signupgenius.com/go/YOURCODE"
+    */
+    var SIGNUP_URL = "https://www.signupgenius.com/YOUR_LINK_HERE";
+
+    var verified = false;
+
+    function onVerified(token) {
+      verified = true;
+      document.getElementById("continueBtn").disabled = false;
+      document.getElementById("errorMsg").style.display = "none";
+    }
+
+    function onError() {
+      verified = false;
+      document.getElementById("continueBtn").disabled = true;
+      document.getElementById("errorMsg").style.display = "block";
+    }
+
+    function proceed() {
+      if (verified) {
+        window.location.href = SIGNUP_URL;
+      }
+    }
+  </script>
+</body>
+</html>
